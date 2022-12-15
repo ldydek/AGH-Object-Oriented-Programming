@@ -17,7 +17,7 @@ fun run(array: MutableList<Direction>) {
             Direction.RIGHT -> "skręca prawo"
         }
         if (value != "")
-            println("Zwierze $value")
+            println("Zwierzak $value")
     }
 }
 
