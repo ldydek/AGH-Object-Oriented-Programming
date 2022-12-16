@@ -34,14 +34,14 @@ class Vector2d (val x: Int, val y: Int) {
     }
 
     fun opposite(): Vector2d {
-        return Vector2d(-1 * x, -1 * y)
+        return Vector2d(-x, -y)
     }
 
     override fun equals(other: Any?): Boolean {
         return typeChecking(other) && x == (other as Vector2d).x && y == other.y
     }
 
-    fun typeChecking(other: Any?): Boolean {
+    private fun typeChecking(other: Any?): Boolean {
         return other is Vector2d
     }
 }
