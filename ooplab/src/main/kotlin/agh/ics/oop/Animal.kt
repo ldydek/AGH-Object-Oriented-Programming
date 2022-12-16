@@ -14,7 +14,7 @@ class Animal {
 
     fun move(direction: MoveDirection) {
         when (direction) {
-            MoveDirection.LEFT ->  turn = turn.previous()
+            MoveDirection.LEFT -> turn = turn.previous()
             MoveDirection.RIGHT -> turn = turn.next()
             MoveDirection.FORWARD -> {
                 val newPosition = position.add(turn.toUnitVector())
@@ -31,5 +31,13 @@ class Animal {
 
     private fun moveInsideMapCheck(newPosition: Vector2d): Boolean {
         return newPosition.follows(Vector2d(0,0)) && newPosition.precedes(Vector2d(4,4))
+    }
+
+    fun getTurn(): MapDirection {
+        return turn
+    }
+
+    fun getPosition(): Vector2d {
+        return position
     }
 }
