@@ -6,6 +6,11 @@ fun main(args: Array<String>) {
     val output: MutableList<Direction> = fromEnumToString(args)
     run(output)
     println("Stop")
+    val position1 = Vector2d(1, 2)
+    println(position1)
+    val position2 = Vector2d(-2, 1)
+    println(position2)
+    println(position1.add(position2))
 }
 
 fun run(array: MutableList<Direction>) {
