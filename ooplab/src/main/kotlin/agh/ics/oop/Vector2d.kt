@@ -3,7 +3,7 @@ package agh.ics.oop
 import kotlin.math.max
 import kotlin.math.min
 
-class Vector2d (val x: Int, val y: Int) {
+data class Vector2d (val x: Int, val y: Int) {
 
     override fun toString(): String {
         return "($x,$y)"

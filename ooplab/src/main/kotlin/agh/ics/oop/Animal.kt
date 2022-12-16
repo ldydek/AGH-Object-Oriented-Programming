@@ -3,9 +3,24 @@ package agh.ics.oop
 class Animal {
     private var turn = MapDirection.NORTH
     private var position = Vector2d(2, 2)
+    private var map: IWorldMap? = null
+
+    constructor(map: IWorldMap) {
+        this.map = map
+    }
+
+    constructor(map: IWorldMap, initialPosition: Vector2d) {
+        this.map = map
+        this.position = initialPosition
+    }
 
     override fun toString(): String {
-        return "$turn $position"
+        return when (turn) {
+            MapDirection.NORTH -> "^"
+            MapDirection.EAST -> ">"
+            MapDirection.SOUTH -> "v"
+            MapDirection.WEST -> "<"
+        }
     }
 
     fun isAt(position: Vector2d): Boolean {
@@ -30,7 +45,10 @@ class Animal {
     }
 
     private fun moveInsideMapCheck(newPosition: Vector2d): Boolean {
-        return newPosition.follows(Vector2d(0,0)) && newPosition.precedes(Vector2d(4,4))
+        return if (this.map is IWorldMap)
+            this.map!!.canMoveTo(newPosition)
+        else
+            newPosition.follows(Vector2d(0, 0)) && newPosition.precedes(Vector2d(4, 4))
     }
 
     fun getTurn(): MapDirection {
