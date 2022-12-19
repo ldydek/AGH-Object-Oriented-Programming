@@ -5,7 +5,8 @@ class RectangularMap(private val width: Int, private val height: Int) : IWorldMa
     private val animals: ArrayList<Animal> = ArrayList()
 
     override fun canMoveTo(position: Vector2d): Boolean {
-        return position.follows(Vector2d(0, 0)) && position.precedes(Vector2d(width, height))
+        return position.follows(Vector2d(0, 0)) && position.precedes(Vector2d(width-1, height-1)) &&
+                !isOccupied(position)
     }
 
     override fun isOccupied(position: Vector2d): Boolean {
@@ -19,15 +20,19 @@ class RectangularMap(private val width: Int, private val height: Int) : IWorldMa
     }
 
     override fun place(animal: Animal): Boolean {
-        TODO("Not yet implemented")
+        val value = this.animals.filter {it.getPosition() == animal.getPosition()}.size
+        if (value == 0) {
+            this.animals.add(animal)
+            return true
+        }
+        return false
     }
 
     override fun objectAt(position: Vector2d): Any? {
-        TODO("Not yet implemented")
+        return this.animals.firstOrNull { it.getPosition() == position }
     }
 
     override fun animals(): List<Animal> {
-        TODO("Not yet implemented")
+        return this.animals
     }
-
 }

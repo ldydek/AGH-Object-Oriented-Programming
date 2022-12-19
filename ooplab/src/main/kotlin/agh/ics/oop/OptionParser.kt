@@ -1,8 +1,8 @@
 package agh.ics.oop
 
 class OptionParser {
-    fun parse(array: Array<String>): MutableList<MoveDirection> {
-        val output: MutableList<MoveDirection> = ArrayList()
+    fun parse(array: Array<String>): ArrayList<MoveDirection> {
+        val output: ArrayList<MoveDirection> = ArrayList()
         for (item in array) {
             val value = when (item) {
                 "f", "forward" -> MoveDirection.FORWARD

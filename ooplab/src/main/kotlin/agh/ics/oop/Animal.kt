@@ -5,6 +5,9 @@ class Animal {
     private var position = Vector2d(2, 2)
     private var map: IWorldMap? = null
 
+//    konstruktor dodany na potrzeby testów klasy Animal
+    constructor() { }
+
     constructor(map: IWorldMap) {
         this.map = map
     }
