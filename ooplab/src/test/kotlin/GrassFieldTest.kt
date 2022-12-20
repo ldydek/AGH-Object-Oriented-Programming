@@ -22,8 +22,8 @@ class GrassFieldTest {
         assertTrue(map.isOccupied(Vector2d(2, 2)))
         assertTrue(map.isOccupied(Vector2d(3, 2)))
         assertTrue(map.isOccupied(Vector2d(1, 0)))
-        assertTrue(map.isOccupied(grassList[0].getPosition()))
-        assertTrue(map.isOccupied(grassList[1].getPosition()))
+        assertFalse(map.isOccupied(grassList[0].getPosition()))
+        assertFalse(map.isOccupied(grassList[1].getPosition()))
     }
 
     @Test
