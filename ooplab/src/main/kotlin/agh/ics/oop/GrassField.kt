@@ -14,7 +14,6 @@ class GrassField(private val grassQuantity: Int) : AbstractWorldMap() {
         if (any is Grass) {
             mapElementList.remove(any)
             generateGrass(1)
-            println("TUTAJ")
         }
         return super.canMoveTo(position)
     }
