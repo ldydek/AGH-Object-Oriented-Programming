@@ -6,7 +6,7 @@ class Animal {
     private var map: IWorldMap? = null
 
 //    konstruktor dodany na potrzeby testów klasy Animal
-    constructor() { }
+    constructor()
 
     constructor(map: IWorldMap) {
         this.map = map
@@ -24,10 +24,6 @@ class Animal {
             MapDirection.SOUTH -> "v"
             MapDirection.WEST -> "<"
         }
-    }
-
-    fun isAt(position: Vector2d): Boolean {
-        return position.x == position.x && position.y == position.y
     }
 
     fun move(direction: MoveDirection) {

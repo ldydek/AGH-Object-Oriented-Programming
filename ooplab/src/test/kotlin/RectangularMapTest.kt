@@ -40,6 +40,17 @@ class RectangularMapTest {
         assertEquals(map.objectAt(Vector2d(1,3)), null)
     }
 
+    @Test
+    fun animalListTest() {
+        val animalOne = Animal(map, Vector2d(3, 3))
+        val animalTwo = Animal(map, Vector2d(3, 4))
+        map.place(animalOne)
+        map.place(animalTwo)
+        assertEquals(map.animals()[0], animalOne)
+        assertEquals(map.animals()[1], animalTwo)
+        assertNotEquals(map.animals()[0], animalTwo)
+    }
+
     private fun addAnimals(): Array<Animal> {
         val animal1 = Animal(map, Vector2d(3, 4))
         val animal2 = Animal(map, Vector2d(1, 1))

@@ -28,6 +28,7 @@ class RectangularMap(private val width: Int, private val height: Int) : IWorldMa
         return false
     }
 
+//    metoda wykorzystywana tylko przy wizualizacji mapy
     override fun objectAt(position: Vector2d): Any? {
         return this.animals.firstOrNull { it.getPosition() == position }
     }
