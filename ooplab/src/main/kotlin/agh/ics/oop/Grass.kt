@@ -6,10 +6,6 @@ class Grass(private val position: Vector2d) : IMapElement {
         return this.position
     }
 
-    override fun getObjectType(): Any {
-        return this.javaClass
-    }
-
     override fun toString(): String {
         return "*"
     }

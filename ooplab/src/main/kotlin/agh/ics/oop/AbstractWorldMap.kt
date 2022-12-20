@@ -8,7 +8,8 @@ abstract class AbstractWorldMap : IWorldMap {
     protected var upperRightCorner: Vector2d = Vector2d(Int.MIN_VALUE, Int.MIN_VALUE)
 
     override fun isOccupied(position: Vector2d): Boolean {
-        return mapElementList.any {it.getPosition() == position}
+        val animalList: List<Animal> = animals()
+        return animalList.any {it.getPosition() == position}
     }
 
     override fun animals(): List<Animal> {

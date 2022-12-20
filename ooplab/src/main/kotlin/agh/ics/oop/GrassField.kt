@@ -8,6 +8,16 @@ class GrassField(private val grassQuantity: Int) : AbstractWorldMap() {
     init {
         generateGrass(this.grassQuantity)
     }
+    
+    override fun canMoveTo(position: Vector2d): Boolean {
+        val any: Any? = objectAt(position)
+        if (any is Grass) {
+            mapElementList.remove(any)
+            generateGrass(1)
+            println("TUTAJ")
+        }
+        return super.canMoveTo(position)
+    }
 
     override fun toString(): String {
         val coordinates = getCoordinatesOfDynamicMap()

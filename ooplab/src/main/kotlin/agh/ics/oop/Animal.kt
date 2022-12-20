@@ -57,8 +57,4 @@ class Animal : IMapElement {
     override fun getPosition(): Vector2d {
         return position
     }
-
-    override fun getObjectType(): Any {
-        return this.javaClass
-    }
 }
