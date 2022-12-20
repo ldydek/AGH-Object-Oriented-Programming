@@ -8,8 +8,4 @@ fun main(args: Array<String>) {
     val engine: IEngine = SimulationEngine(directions, map, positions)
     engine.run()
     println(map)
-    println("-------------")
-    val map1: IWorldMap= RectangularMap(5, 5)
-    val engine1: IEngine = SimulationEngine(directions, map1, positions)
-    engine1.run()
 }

@@ -1,6 +1,6 @@
 package agh.ics.oop
 
-class Animal {
+class Animal : IMapElement {
     private var turn = MapDirection.NORTH
     private var position = Vector2d(2, 2)
     private var map: IWorldMap? = null
@@ -54,7 +54,11 @@ class Animal {
         return turn
     }
 
-    fun getPosition(): Vector2d {
+    override fun getPosition(): Vector2d {
         return position
+    }
+
+    override fun getObjectType(): Any {
+        return this.javaClass
     }
 }

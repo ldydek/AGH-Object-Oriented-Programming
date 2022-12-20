@@ -1,9 +1,13 @@
 package agh.ics.oop
 
-class Grass(private val position: Vector2d) {
+class Grass(private val position: Vector2d) : IMapElement {
 
-    fun getPosition(): Vector2d {
+    override fun getPosition(): Vector2d {
         return this.position
+    }
+
+    override fun getObjectType(): Any {
+        return this.javaClass
     }
 
     override fun toString(): String {
