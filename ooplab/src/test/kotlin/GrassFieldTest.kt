@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test
 
 class GrassFieldTest {
     private val map = GrassField(5)
-    private val grassList: ArrayList<Grass> = map.getGrassList()
+    private val grassList: List<Grass> = map.getGrassList()
 
     @Test
     fun placeTest() {

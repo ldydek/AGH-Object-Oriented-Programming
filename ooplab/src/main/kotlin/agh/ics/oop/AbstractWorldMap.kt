@@ -1,32 +1,32 @@
 package agh.ics.oop
 
-abstract class AbstractWorldMap : IWorldMap {
+abstract class AbstractWorldMap : IWorldMap, IPositionChangeObserver {
 
-    protected val mapElementList: ArrayList<IMapElement> = ArrayList()
+    protected val mapElementHashMap = HashMap<Vector2d, IMapElement>()
     protected val visualizer = MapVisualizer(this)
     protected var lowerLeftCorner: Vector2d = Vector2d(Int.MAX_VALUE, Int.MAX_VALUE)
     protected var upperRightCorner: Vector2d = Vector2d(Int.MIN_VALUE, Int.MIN_VALUE)
 
     override fun isOccupied(position: Vector2d): Boolean {
-        val animalList: List<Animal> = animals()
-        return animalList.any {it.getPosition() == position}
-    }
-
-    override fun animals(): List<Animal> {
-        return this.mapElementList.filterIsInstance(Animal::class.java)
+        return mapElementHashMap[position] != null
     }
 
     override fun canMoveTo(position: Vector2d): Boolean {
         return !isOccupied(position)
     }
 
-    override fun objectAt(position: Vector2d): Any? {
-        return this.mapElementList.firstOrNull { it.getPosition() == position }
+    override fun animals(): List<Animal> {
+        val iElementMap: Map<Vector2d, IMapElement> = this.mapElementHashMap.filter { it.value == Animal::javaClass }
+        return iElementMap.map { it.value as Animal }
+    }
+
+    override fun objectAt(position: Vector2d): IMapElement? {
+        return this.mapElementHashMap[position]
     }
 
     override fun place(animal: Animal): Boolean {
-        if (!isOccupied(animal.getPosition())) {
-            this.mapElementList.add(animal)
+        if (canMoveTo(animal.getPosition())) {
+            this.mapElementHashMap[animal.getPosition()] = animal
             return true
         }
         return false
@@ -34,5 +34,10 @@ abstract class AbstractWorldMap : IWorldMap {
 
     override fun toString(): String {
         return visualizer.draw(lowerLeftCorner, upperRightCorner)
+    }
+
+    override fun positionChanged(oldPosition: Vector2d, newPosition: Vector2d) {
+        val animal: Animal = mapElementHashMap.remove(oldPosition) as Animal
+        mapElementHashMap[newPosition] = animal
     }
 }

@@ -12,9 +12,8 @@ class GrassField(private val grassQuantity: Int) : AbstractWorldMap() {
     override fun canMoveTo(position: Vector2d): Boolean {
         val any: Any? = objectAt(position)
         if (any is Grass) {
-            mapElementList.remove(any)
+            mapElementHashMap.remove(any.getPosition())
             generateGrass(1)
-            println("TUTAJ")
         }
         return super.canMoveTo(position)
     }
@@ -25,12 +24,13 @@ class GrassField(private val grassQuantity: Int) : AbstractWorldMap() {
     }
 
     fun getGrassList(): List<Grass> {
-        return this.mapElementList.filterIsInstance(Grass::class.java)
+        val iElementMap: Map<Vector2d, IMapElement> = this.mapElementHashMap.filter { it.value == Grass::javaClass }
+        return iElementMap.map { it.value as Grass }
     }
 
     private fun getCoordinatesOfDynamicMap(): Array<Vector2d> {
-        mapElementList.forEach { lowerLeftCorner = lowerLeftCorner.lowerLeft(it.getPosition()) }
-        mapElementList.forEach { upperRightCorner = upperRightCorner.upperRight(it.getPosition()) }
+        mapElementHashMap.forEach { lowerLeftCorner = lowerLeftCorner.lowerLeft(it.key) }
+        mapElementHashMap.forEach { upperRightCorner = upperRightCorner.upperRight(it.key) }
         return arrayOf(lowerLeftCorner, upperRightCorner)
     }
 
@@ -53,6 +53,6 @@ class GrassField(private val grassQuantity: Int) : AbstractWorldMap() {
     }
 
     private fun place(grass: Grass) {
-        this.mapElementList.add(grass)
+        this.mapElementHashMap[grass.getPosition()] = grass
     }
 }

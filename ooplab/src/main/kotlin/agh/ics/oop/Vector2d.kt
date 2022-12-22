@@ -5,10 +5,6 @@ import kotlin.math.min
 
 data class Vector2d (val x: Int, val y: Int) {
 
-    override fun toString(): String {
-        return "($x,$y)"
-    }
-
     fun precedes(other: Vector2d): Boolean {
         return x <= other.x && y <= other.y
     }
@@ -35,6 +31,10 @@ data class Vector2d (val x: Int, val y: Int) {
 
     fun opposite(): Vector2d {
         return Vector2d(-x, -y)
+    }
+
+    override fun toString(): String {
+        return "($x,$y)"
     }
 
     override fun equals(other: Any?): Boolean {
