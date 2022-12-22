@@ -29,8 +29,7 @@ class GrassField(private val grassQuantity: Int) : AbstractWorldMap(), IPosition
     }
 
     override fun positionChanged(oldPosition: Vector2d, newPosition: Vector2d) {
-        val animal: Animal = mapElementHashMap.remove(oldPosition) as Animal
-        mapElementHashMap[newPosition] = animal
+        super.positionChanged(oldPosition, newPosition)
         this.mapBoundary.positionChanged(oldPosition, newPosition)
     }
 
