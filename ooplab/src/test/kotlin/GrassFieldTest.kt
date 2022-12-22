@@ -11,7 +11,7 @@ class GrassFieldTest {
         val animalOne = Animal(map, Vector2d(3, 3))
         val animalTwo = Animal(map, Vector2d(3, 3))
         assertTrue(map.place(animalOne))
-        assertFalse(map.place(animalTwo))
+        assertThrows(IllegalArgumentException::class.java) { map.place(animalTwo) }
     }
 
     @Test

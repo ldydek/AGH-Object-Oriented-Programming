@@ -1,6 +1,6 @@
 package agh.ics.oop
 
-class RectangularMap(private val width: Int, private val height: Int) : AbstractWorldMap() {
+class RectangularMap(private val width: Int, private val height: Int) : AbstractWorldMap(), IPositionChangeObserver {
 
     init {
         lowerLeftCorner = Vector2d(0, 0)

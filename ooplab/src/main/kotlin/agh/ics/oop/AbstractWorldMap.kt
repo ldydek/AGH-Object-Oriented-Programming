@@ -1,11 +1,14 @@
 package agh.ics.oop
 
+import java.lang.IllegalArgumentException
+
 abstract class AbstractWorldMap : IWorldMap, IPositionChangeObserver {
 
     protected val mapElementHashMap = HashMap<Vector2d, IMapElement>()
     protected val visualizer = MapVisualizer(this)
     protected var lowerLeftCorner: Vector2d = Vector2d(Int.MAX_VALUE, Int.MAX_VALUE)
     protected var upperRightCorner: Vector2d = Vector2d(Int.MIN_VALUE, Int.MIN_VALUE)
+    protected val mapBoundary: MapBoundary = MapBoundary()
 
     override fun isOccupied(position: Vector2d): Boolean {
         return mapElementHashMap[position] != null
@@ -27,9 +30,10 @@ abstract class AbstractWorldMap : IWorldMap, IPositionChangeObserver {
     override fun place(animal: Animal): Boolean {
         if (canMoveTo(animal.getPosition())) {
             this.mapElementHashMap[animal.getPosition()] = animal
+            mapBoundary.addElement(animal)
             return true
         }
-        return false
+        throw IllegalArgumentException("place " + animal.getPosition().toString() + " is already occupied")
     }
 
     override fun toString(): String {

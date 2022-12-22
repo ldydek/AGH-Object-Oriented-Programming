@@ -3,7 +3,7 @@ package agh.ics.oop
 import kotlin.math.sqrt
 import kotlin.random.Random
 
-class GrassField(private val grassQuantity: Int) : AbstractWorldMap() {
+class GrassField(private val grassQuantity: Int) : AbstractWorldMap(), IPositionChangeObserver {
 
     init {
         generateGrass(this.grassQuantity)
@@ -28,9 +28,15 @@ class GrassField(private val grassQuantity: Int) : AbstractWorldMap() {
         return iElementMap.map { it.value as Grass }
     }
 
+    override fun positionChanged(oldPosition: Vector2d, newPosition: Vector2d) {
+        val animal: Animal = mapElementHashMap.remove(oldPosition) as Animal
+        mapElementHashMap[newPosition] = animal
+        this.mapBoundary.positionChanged(oldPosition, newPosition)
+    }
+
     private fun getCoordinatesOfDynamicMap(): Array<Vector2d> {
-        mapElementHashMap.forEach { lowerLeftCorner = lowerLeftCorner.lowerLeft(it.key) }
-        mapElementHashMap.forEach { upperRightCorner = upperRightCorner.upperRight(it.key) }
+        lowerLeftCorner = mapBoundary.getLowerLeftCorner()
+        upperRightCorner = mapBoundary.getUpperRightCorner()
         return arrayOf(lowerLeftCorner, upperRightCorner)
     }
 
@@ -54,5 +60,6 @@ class GrassField(private val grassQuantity: Int) : AbstractWorldMap() {
 
     private fun place(grass: Grass) {
         this.mapElementHashMap[grass.getPosition()] = grass
+        mapBoundary.addElement(grass)
     }
 }

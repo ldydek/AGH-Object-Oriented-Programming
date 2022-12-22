@@ -1,4 +1,7 @@
-import agh.ics.oop.*
+import agh.ics.oop.Animal
+import agh.ics.oop.IWorldMap
+import agh.ics.oop.RectangularMap
+import agh.ics.oop.Vector2d
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
@@ -22,7 +25,8 @@ class RectangularMapTest {
     fun placeTest() {
         assertTrue(map.place(Animal(map)))
         assertTrue(map.place(Animal(map, Vector2d(3, 4))))
-        assertFalse(map.place(Animal(map)))
+        assertThrows(IllegalArgumentException::class.java) { map.place(Animal(map)) }
+        assertThrows(IllegalArgumentException::class.java) { map.place(Animal(map, Vector2d(3, 4))) }
     }
 
     @Test

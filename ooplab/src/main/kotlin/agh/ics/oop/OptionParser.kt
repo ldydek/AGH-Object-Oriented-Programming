@@ -1,5 +1,7 @@
 package agh.ics.oop
 
+import java.lang.IllegalArgumentException
+
 class OptionParser {
     fun parse(array: Array<String>): ArrayList<MoveDirection> {
         val output: ArrayList<MoveDirection> = ArrayList()
@@ -9,11 +11,9 @@ class OptionParser {
                 "b", "backward" -> MoveDirection.BACKWARD
                 "l", "left" -> MoveDirection.LEFT
                 "r", "right" -> MoveDirection.RIGHT
-                else -> null
+                else -> throw IllegalArgumentException("$item is not legal move specification")
             }
-            if (value != null) {
-                output.add(value)
-            }
+            output.add(value)
         }
         return output
     }

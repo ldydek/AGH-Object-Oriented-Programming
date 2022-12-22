@@ -2,13 +2,14 @@ import agh.ics.oop.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
+
 class OptionParserTest {
 
     @Test
     fun parsingTest() {
-        val strings = arrayOf("f", "forward", "b", "backward", "wrong", "left", "l", "wrong", "r", "wrong", "right")
-        val output: MutableList<MoveDirection> = OptionParser().parse(strings)
-        assertEquals(strings.size-3, output.size)
+        val argList = arrayOf("f", "forward", "b", "backward", "left", "l", "r", "right")
+        val output: MutableList<MoveDirection> = OptionParser().parse(argList)
+        assertEquals(argList.size, output.size)
         assertEquals(output[0], MoveDirection.FORWARD)
         assertEquals(output[1], MoveDirection.FORWARD)
         assertEquals(output[2], MoveDirection.BACKWARD)
@@ -17,5 +18,11 @@ class OptionParserTest {
         assertEquals(output[5], MoveDirection.LEFT)
         assertEquals(output[6], MoveDirection.RIGHT)
         assertEquals(output[7], MoveDirection.RIGHT)
+    }
+
+    @Test
+    fun exceptionThrowingTest() {
+        val wrongArgList = arrayOf("wrong", "f", "wrong", "po", "backward", "left")
+        assertThrows(IllegalArgumentException::class.java) { OptionParser().parse(wrongArgList) }
     }
 }

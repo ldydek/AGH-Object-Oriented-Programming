@@ -58,10 +58,6 @@ class Animal : IMapElement {
         this.observerList.add(observer)
     }
 
-    private fun removeObserver(observer: IPositionChangeObserver) {
-        this.observerList.remove(observer)
-    }
-
     private fun moveInsideMapCheck(newPosition: Vector2d): Boolean {
         return if (this.map is IWorldMap) this.map!!.canMoveTo(newPosition)
         else newPosition.follows(Vector2d(0, 0)) && newPosition.precedes(Vector2d(4, 4))
