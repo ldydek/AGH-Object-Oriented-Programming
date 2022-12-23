@@ -51,4 +51,6 @@ interface IWorldMap {
      * @return List of animals.
      */
     fun animals(): List<Animal>
+
+    fun getCorners(): Array<Vector2d>
 }

@@ -36,7 +36,7 @@ class GrassField(private val grassQuantity: Int) : AbstractWorldMap(), IPosition
     private fun getCoordinatesOfDynamicMap(): Array<Vector2d> {
         lowerLeftCorner = mapBoundary.getLowerLeftCorner()
         upperRightCorner = mapBoundary.getUpperRightCorner()
-        return arrayOf(lowerLeftCorner, upperRightCorner)
+        return super.getCorners()
     }
 
     private fun generateGrass(grassQuantity: Int) {
