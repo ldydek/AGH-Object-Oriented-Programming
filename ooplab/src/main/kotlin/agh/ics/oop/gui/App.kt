@@ -15,22 +15,23 @@ class App : Application() {
 
     private val map = GrassField(10)
     private val sceneRatio: Int = 75
-    private val cornersCoordinates = map.getCorners()
-//    bottom left and upper right corners of map
 
     override fun init() {
         val args = parameters.raw
         println(args)
         val directions: ArrayList<MoveDirection> = OptionParser().parse(args.toTypedArray())
-        val positions = arrayOf(Vector2d(10, 3), Vector2d(10, 2))
+        val positions = arrayOf(Vector2d(4, 3), Vector2d(4, 2))
         val engine: IEngine = SimulationEngine(directions, map, positions)
         engine.run()
         println(map)
     }
 
     override fun start(primaryStage: Stage?) {
-        val (rowsNumber, columnsNumber) = countRowColumnQuantity()
-        val gridPane: GridPane = createGridPane()
+        val cornersCoordinates: Array<Vector2d> = map.getCorners()
+//    bottom left and upper right corners of map
+
+        val (rowsNumber, columnsNumber) = countRowColumnQuantity(cornersCoordinates)
+        val gridPane: GridPane = createGridPane(cornersCoordinates)
         addGridPaneElements(gridPane, cornersCoordinates[0].x, cornersCoordinates[1].y)
         val scene = Scene(gridPane, (columnsNumber * sceneRatio).toDouble(), (rowsNumber * sceneRatio).toDouble())
         if (primaryStage != null) {
@@ -39,11 +40,11 @@ class App : Application() {
         primaryStage?.show()
     }
 
-    private fun createGridPane(): GridPane {
+    private fun createGridPane(cornersCoordinates: Array<Vector2d>): GridPane {
         val gridPane = GridPane()
         gridPane.isGridLinesVisible = true
 
-        val (rowsNumber, columnsNumber) = countRowColumnQuantity()
+        val (rowsNumber, columnsNumber) = countRowColumnQuantity(cornersCoordinates)
         val yx = Label("y\\x")
         labelStyling(yx)
         gridPane.add(yx, 0, 0)
@@ -59,11 +60,11 @@ class App : Application() {
             rowConst.percentHeight = 100.0 / rowsNumber
             gridPane.rowConstraints.add(rowConst)
         }
-        addCoordinates(gridPane)
+        addCoordinates(gridPane, cornersCoordinates)
         return gridPane
     }
 
-    private fun addCoordinates(gridPane: GridPane) {
+    private fun addCoordinates(gridPane: GridPane, cornersCoordinates: Array<Vector2d>) {
         val left = cornersCoordinates[0].x
         val bottom = cornersCoordinates[0].y
         val right = cornersCoordinates[1].x
@@ -105,7 +106,7 @@ class App : Application() {
         label.style = "-fx-font-size: 40px"
     }
 
-    private fun countRowColumnQuantity(): Array<Int> {
+    private fun countRowColumnQuantity(cornersCoordinates: Array<Vector2d>): Array<Int> {
         val rowsNumber = cornersCoordinates[1].y - cornersCoordinates[0].y + 1
         val columnsNumber = cornersCoordinates[1].x - cornersCoordinates[0].x + 1
         return arrayOf(rowsNumber, columnsNumber)
