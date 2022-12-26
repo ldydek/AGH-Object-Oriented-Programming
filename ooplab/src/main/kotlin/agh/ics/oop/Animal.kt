@@ -50,6 +50,23 @@ class Animal : IMapElement {
         }
     }
 
+    fun getTurn(): MapDirection {
+        return turn
+    }
+
+    override fun getPosition(): Vector2d {
+        return position
+    }
+
+    override fun getImagePath(): String {
+        return when (this.turn) {
+            MapDirection.NORTH -> "src/main/resources/up.png"
+            MapDirection.EAST -> "src/main/resources/right.png"
+            MapDirection.SOUTH -> "src/main/resources/down.png"
+            MapDirection.WEST -> "src/main/resources/left.png"
+        }
+    }
+
     private fun positionChanged(newPosition: Vector2d) {
         this.observerList.forEach { it.positionChanged(this.position, newPosition) }
     }
@@ -61,13 +78,5 @@ class Animal : IMapElement {
     private fun moveInsideMapCheck(newPosition: Vector2d): Boolean {
         return if (this.map is IWorldMap) this.map!!.canMoveTo(newPosition)
         else newPosition.follows(Vector2d(0, 0)) && newPosition.precedes(Vector2d(4, 4))
-    }
-
-    fun getTurn(): MapDirection {
-        return turn
-    }
-
-    override fun getPosition(): Vector2d {
-        return position
     }
 }

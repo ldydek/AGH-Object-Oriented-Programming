@@ -3,11 +3,13 @@ package agh.ics.oop.gui
 import agh.ics.oop.*
 import javafx.application.Application
 import javafx.geometry.HPos
+import javafx.geometry.VPos
 import javafx.scene.Scene
 import javafx.scene.control.Label
 import javafx.scene.layout.ColumnConstraints
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.RowConstraints
+import javafx.scene.layout.VBox
 import javafx.stage.Stage
 
 
@@ -94,10 +96,9 @@ class App : Application() {
     private fun addGridPaneElements(gridPane: GridPane, left: Int, top: Int) {
         val mapElementList = map.getMapElementsListCopy()
         mapElementList.forEach {
-            val label = Label(map.objectAt(it.getPosition()).toString())
-            labelStyling(label)
-            GridPane.setHalignment(label, HPos.CENTER)
-            gridPane.add(label, it.getPosition().x-left+1, top-it.getPosition().y+1)
+            val vBox = VBox(GuiElementBox(it).getVBox())
+            GridPane.setHalignment(vBox, HPos.CENTER);
+            gridPane.add(vBox, it.getPosition().x-left+1, top-it.getPosition().y+1)
         }
     }
 

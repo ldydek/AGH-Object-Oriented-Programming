@@ -9,6 +9,6 @@ fun main(args: Array<String>) {
         Application.launch(App::class.java)
     }
     catch (exception: IllegalArgumentException) {
-        println("Wystąpił błąd :(")
+        println("Błędny argument :(")
     }
 }
