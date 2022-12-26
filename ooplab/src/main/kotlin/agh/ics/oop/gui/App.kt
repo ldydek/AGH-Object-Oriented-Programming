@@ -2,6 +2,7 @@ package agh.ics.oop.gui
 
 import agh.ics.oop.*
 import javafx.application.Application
+import javafx.application.Platform
 import javafx.geometry.HPos
 import javafx.geometry.VPos
 import javafx.scene.Scene
@@ -13,19 +14,24 @@ import javafx.scene.layout.VBox
 import javafx.stage.Stage
 
 
-class App : Application() {
+class App : Application(), IPositionChangeObserver {
 
     private val map = GrassField(10)
     private val sceneRatio: Int = 75
+    private var engine: SimulationEngine? = null
+    private val gridPane = GridPane()
+    private val moveDelay = 300
 
     override fun init() {
-        val args = parameters.raw
-        println(args)
-        val directions: ArrayList<MoveDirection> = OptionParser().parse(args.toTypedArray())
+//        val args = parameters.raw
+        val args = arrayOf("f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f")
+        val directions: ArrayList<MoveDirection> = OptionParser().parse(args)
         val positions = arrayOf(Vector2d(4, 3), Vector2d(4, 2))
-        val engine: IEngine = SimulationEngine(directions, map, positions)
-        engine.run()
-        println(map)
+        this.engine  = SimulationEngine(directions, map, positions)
+        engine?.addObserver(this)
+        engine?.setMoveDelay(moveDelay)
+        val engineThread = Thread(engine)
+        engineThread.start()
     }
 
     override fun start(primaryStage: Stage?) {
@@ -40,10 +46,10 @@ class App : Application() {
             primaryStage.scene = scene
         }
         primaryStage?.show()
+        engine?.run()
     }
 
     private fun createGridPane(cornersCoordinates: Array<Vector2d>): GridPane {
-        val gridPane = GridPane()
         gridPane.isGridLinesVisible = true
 
         val (rowsNumber, columnsNumber) = countRowColumnQuantity(cornersCoordinates)
@@ -97,7 +103,7 @@ class App : Application() {
         val mapElementList = map.getMapElementsListCopy()
         mapElementList.forEach {
             val vBox = VBox(GuiElementBox(it).getVBox())
-            GridPane.setHalignment(vBox, HPos.CENTER);
+            GridPane.setValignment(vBox, VPos.BOTTOM)
             gridPane.add(vBox, it.getPosition().x-left+1, top-it.getPosition().y+1)
         }
     }
@@ -111,5 +117,13 @@ class App : Application() {
         val rowsNumber = cornersCoordinates[1].y - cornersCoordinates[0].y + 1
         val columnsNumber = cornersCoordinates[1].x - cornersCoordinates[0].x + 1
         return arrayOf(rowsNumber, columnsNumber)
+    }
+
+    override fun positionChanged(oldPosition: Vector2d, newPosition: Vector2d) {
+        Platform.runLater {
+            this.gridPane.children.clear()
+            val mapCorners = map.getCorners()
+            createGridPane(mapCorners)
+        }
     }
 }

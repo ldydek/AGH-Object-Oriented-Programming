@@ -13,6 +13,9 @@ import java.io.FileNotFoundException
 class GuiElementBox(iMapElement: IMapElement) {
 
     private val vBox = VBox()
+    private val imageWidth = 45.0
+    private val imageHeight = 45.0
+    // te wymiary lepiej oddają podczas symulacji zamiast 20
 
     init {
         try {
@@ -26,10 +29,11 @@ class GuiElementBox(iMapElement: IMapElement) {
                 Label("Trawa")
             }
 
-            imageView.fitWidth = 20.0
-            imageView.fitHeight = 20.0
+            imageView.fitWidth = imageWidth
+            imageView.fitHeight = imageHeight
 
             addElementsToVBox(imageView, label)
+            styleVBox()
         }
         catch (exception: FileNotFoundException) {
             println("Nie można znaleźć ścieżki do pliku - $exception")
@@ -43,7 +47,11 @@ class GuiElementBox(iMapElement: IMapElement) {
     private fun addElementsToVBox(imageView: ImageView, label: Label) {
         vBox.children.add(imageView)
         vBox.children.add(label)
+    }
+
+    private fun styleVBox() {
         vBox.alignment = Pos.CENTER
         vBox.prefHeight = 70.0
+//        wyśrodkowanie vBoxa pionowo nie działało więc użyłem tej mniej eleganckiej opcji
     }
 }
