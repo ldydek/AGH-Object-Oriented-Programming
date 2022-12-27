@@ -13,8 +13,8 @@ import java.io.FileNotFoundException
 class GuiElementBox(iMapElement: IMapElement) {
 
     private val vBox = VBox()
-    private val imageWidth = 45.0
-    private val imageHeight = 45.0
+    private val imageWidth = 35.0
+    private val imageHeight = 35.0
     // te wymiary lepiej oddają podczas symulacji zamiast 20
 
     init {

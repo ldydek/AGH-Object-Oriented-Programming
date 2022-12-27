@@ -17,16 +17,17 @@ import javafx.stage.Stage
 class App : Application(), IPositionChangeObserver {
 
     private val map = GrassField(10)
-    private val sceneRatio: Int = 75
     private var engine: SimulationEngine? = null
     private val gridPane = GridPane()
-    private val moveDelay = 300
+    private val moveDelay = 1000
+    private val cellSize = 60
 
     override fun init() {
 //        val args = parameters.raw
-        val args = arrayOf("f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f")
+        val args = arrayOf("f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f",
+            "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f")
         val directions: ArrayList<MoveDirection> = OptionParser().parse(args)
-        val positions = arrayOf(Vector2d(4, 3), Vector2d(4, 2))
+        val positions = arrayOf(Vector2d(4, 6), Vector2d(4, 7), Vector2d(5, 6))
         this.engine  = SimulationEngine(directions, map, positions)
         engine?.addObserver(this)
         engine?.setMoveDelay(moveDelay)
@@ -35,44 +36,49 @@ class App : Application(), IPositionChangeObserver {
     }
 
     override fun start(primaryStage: Stage?) {
-        val cornersCoordinates: Array<Vector2d> = map.getCorners()
+        println(map)
 //    bottom left and upper right corners of map
 
-        val (rowsNumber, columnsNumber) = countRowColumnQuantity(cornersCoordinates)
-        val gridPane: GridPane = createGridPane(cornersCoordinates)
-        addGridPaneElements(gridPane, cornersCoordinates[0].x, cornersCoordinates[1].y)
-        val scene = Scene(gridPane, (columnsNumber * sceneRatio).toDouble(), (rowsNumber * sceneRatio).toDouble())
+        val (rowsNumber, columnsNumber) = countRowColumnQuantity()
+        val gridPane: GridPane = createGridPane()
+        addGridPaneElements()
+        val scene = Scene(gridPane, (this.cellSize * (columnsNumber+1)).toDouble(),
+            (this.cellSize * (rowsNumber+1)).toDouble())
         if (primaryStage != null) {
             primaryStage.scene = scene
         }
         primaryStage?.show()
-        engine?.run()
     }
 
-    private fun createGridPane(cornersCoordinates: Array<Vector2d>): GridPane {
-        gridPane.isGridLinesVisible = true
+    private fun createGridPane(): GridPane {
+        println(map.getCorners()[0])
+        println(map.getCorners()[1])
+        this.gridPane.isGridLinesVisible = false
+        this.gridPane.isGridLinesVisible = true
 
-        val (rowsNumber, columnsNumber) = countRowColumnQuantity(cornersCoordinates)
+        val (rowsNumber, columnsNumber) = countRowColumnQuantity()
         val yx = Label("y\\x")
         labelStyling(yx)
         gridPane.add(yx, 0, 0)
+        this.gridPane.columnConstraints.add(ColumnConstraints(this.cellSize.toDouble()))
+        this.gridPane.rowConstraints.add(RowConstraints(this.cellSize.toDouble()))
         GridPane.setHalignment(yx, HPos.CENTER)
 
-        for (i in 0 until columnsNumber+1) {
-            val colConst = ColumnConstraints()
-            colConst.percentWidth = 100.0 / columnsNumber
-            gridPane.columnConstraints.add(colConst)
+        for (i in 0 until columnsNumber) {
+            val colConstraint = ColumnConstraints(this.cellSize.toDouble())
+            gridPane.columnConstraints.add(colConstraint)
         }
-        for (i in 0 until rowsNumber+1) {
-            val rowConst = RowConstraints()
-            rowConst.percentHeight = 100.0 / rowsNumber
-            gridPane.rowConstraints.add(rowConst)
+        for (i in 0 until rowsNumber) {
+            val rowConstraint = RowConstraints(this.cellSize.toDouble())
+            gridPane.rowConstraints.add(rowConstraint)
         }
-        addCoordinates(gridPane, cornersCoordinates)
+
+        addCoordinates()
         return gridPane
     }
 
-    private fun addCoordinates(gridPane: GridPane, cornersCoordinates: Array<Vector2d>) {
+    private fun addCoordinates() {
+        val cornersCoordinates = map.getCorners()
         val left = cornersCoordinates[0].x
         val bottom = cornersCoordinates[0].y
         val right = cornersCoordinates[1].x
@@ -80,7 +86,7 @@ class App : Application(), IPositionChangeObserver {
 
 //        adding rows
         var index = 0
-        for (i in top downTo bottom-1) {
+        for (i in top downTo bottom) {
             index++
             val label = Label((i).toString())
             labelStyling(label)
@@ -99,7 +105,10 @@ class App : Application(), IPositionChangeObserver {
         }
     }
 
-    private fun addGridPaneElements(gridPane: GridPane, left: Int, top: Int) {
+    private fun addGridPaneElements() {
+        val cornersCoordinates = map.getCorners()
+        val left: Int = cornersCoordinates[0].x
+        val top: Int =  cornersCoordinates[1].y
         val mapElementList = map.getMapElementsListCopy()
         mapElementList.forEach {
             val vBox = VBox(GuiElementBox(it).getVBox())
@@ -113,7 +122,8 @@ class App : Application(), IPositionChangeObserver {
         label.style = "-fx-font-size: 40px"
     }
 
-    private fun countRowColumnQuantity(cornersCoordinates: Array<Vector2d>): Array<Int> {
+    private fun countRowColumnQuantity(): Array<Int> {
+        val cornersCoordinates = map.getCorners()
         val rowsNumber = cornersCoordinates[1].y - cornersCoordinates[0].y + 1
         val columnsNumber = cornersCoordinates[1].x - cornersCoordinates[0].x + 1
         return arrayOf(rowsNumber, columnsNumber)
@@ -121,9 +131,9 @@ class App : Application(), IPositionChangeObserver {
 
     override fun positionChanged(oldPosition: Vector2d, newPosition: Vector2d) {
         Platform.runLater {
-            this.gridPane.children.clear()
-            val mapCorners = map.getCorners()
-            createGridPane(mapCorners)
+            gridPane.children.clear()
+            createGridPane()
+            addGridPaneElements()
         }
     }
 }

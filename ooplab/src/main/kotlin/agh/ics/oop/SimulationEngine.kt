@@ -8,7 +8,7 @@ class SimulationEngine(
 
     private val animals: ArrayList<Animal> = ArrayList()
     private val observers: ArrayList<IPositionChangeObserver> = ArrayList()
-    private var moveDelay: Long = 300
+    private var moveDelay: Long = 1000
 
     init {
         for (position in positions) {

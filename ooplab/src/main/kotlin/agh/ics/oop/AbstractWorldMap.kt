@@ -42,6 +42,7 @@ abstract class AbstractWorldMap : IWorldMap, IPositionChangeObserver {
 
     override fun positionChanged(oldPosition: Vector2d, newPosition: Vector2d) {
         val animal: Animal = mapElementHashMap.remove(oldPosition) as Animal
+        cornersUpdate(newPosition)
         mapElementHashMap[newPosition] = animal
     }
 
@@ -53,5 +54,10 @@ abstract class AbstractWorldMap : IWorldMap, IPositionChangeObserver {
         val mapElementList: ArrayList<IMapElement> = ArrayList()
         mapElementHashMap.forEach { mapElementList.add(it.value) }
         return mapElementList
+    }
+
+    private fun cornersUpdate(position: Vector2d) {
+        this.lowerLeftCorner = this.lowerLeftCorner.lowerLeft(position)
+        this.upperRightCorner = this.upperRightCorner.upperRight(position)
     }
 }
