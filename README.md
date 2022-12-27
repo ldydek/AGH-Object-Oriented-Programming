@@ -5,3 +5,7 @@ introduction to object oriented programming approach including some design patte
 and released tags. I strongly recommend to also visit linked repository above.
 
 Additionally, below I uploaded short video showing how this simulation works.
+
+
+https://user-images.githubusercontent.com/91955435/209689859-0a0a7430-433a-45c8-8fb9-4bbbc04c8721.mov
+
