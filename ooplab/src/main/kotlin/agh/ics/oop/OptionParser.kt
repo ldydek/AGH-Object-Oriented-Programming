@@ -11,7 +11,7 @@ class OptionParser {
                 "b", "backward" -> MoveDirection.BACKWARD
                 "l", "left" -> MoveDirection.LEFT
                 "r", "right" -> MoveDirection.RIGHT
-                else -> throw IllegalArgumentException("$item is not legal move specification")
+                else -> throw IllegalArgumentException()
             }
             output.add(value)
         }

@@ -31,6 +31,7 @@ class GrassField(private val grassQuantity: Int) : AbstractWorldMap(), IPosition
     override fun positionChanged(oldPosition: Vector2d, newPosition: Vector2d) {
         super.positionChanged(oldPosition, newPosition)
         this.mapBoundary.positionChanged(oldPosition, newPosition)
+        cornersUpdate()
     }
 
     private fun getCoordinatesOfDynamicMap(): Array<Vector2d> {

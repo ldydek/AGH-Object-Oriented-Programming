@@ -19,11 +19,11 @@ class App : Application(), IPositionChangeObserver {
     private val map = GrassField(10)
     private var engine: SimulationEngine? = null
     private val gridPane = GridPane()
-    private val moveDelay = 1000
+    private val moveDelay = 500
     private val cellSize = 60
 
     override fun init() {
-        val positions = arrayOf(Vector2d(4, 6), Vector2d(4, 7), Vector2d(5, 6))
+        val positions = arrayOf(Vector2d(4, 6), Vector2d(4, 7))
         this.engine  = SimulationEngine(map, positions)
         engine?.addObserver(this)
         engine?.setMoveDelay(moveDelay)
@@ -32,7 +32,7 @@ class App : Application(), IPositionChangeObserver {
     override fun start(primaryStage: Stage?) {
         val start = Button("START")
         val moves = TextField()
-        var exceptionInfo = Label()
+        val exceptionInfo = Label()
         val hBox = HBox(start, moves, exceptionInfo)
 
         hBoxStyling(hBox)
@@ -135,8 +135,8 @@ class App : Application(), IPositionChangeObserver {
     }
 
     private fun buttonHandler(button: Button, textField: TextField, exceptionInfo: Label) {
-        try {
-            button.setOnAction {
+        button.setOnAction {
+            try {
                 val input: String = textField.text
                 val movesStringList: List<String> = input.split(" ")
                 val moveDirectionList = OptionParser().parse(movesStringList.toTypedArray())
@@ -145,15 +145,16 @@ class App : Application(), IPositionChangeObserver {
                 val engineThread = Thread(engine)
                 engineThread.start()
             }
-        } catch (exception: IllegalArgumentException) {
-            println(exception)
-            exceptionInfo.text = "BŁĘDNE DANE!"
+            catch (exception: IllegalArgumentException) {
+                println(exception)
+                exceptionInfo.text = "BŁĘDNE DANE!"
+            }
         }
     }
 
     private fun hBoxStyling(hBox: HBox) {
-        hBox.prefWidth = this.cellSize.toDouble()
-        hBox.prefHeight = this.cellSize.toDouble()
+        hBox.minWidth = this.cellSize.toDouble()
+        hBox.minHeight = this.cellSize.toDouble()
         hBox.alignment = Pos.CENTER
         hBox.spacing = 10.0
     }

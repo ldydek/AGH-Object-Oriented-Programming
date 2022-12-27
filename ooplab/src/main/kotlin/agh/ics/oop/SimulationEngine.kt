@@ -22,7 +22,6 @@ class SimulationEngine(
     override fun run() {
         val animalsAmount: Int = this.animals.size
         moves.forEachIndexed {index, _ ->
-            println(this.map)
             val oldPosition = animals[index%animalsAmount].getPosition()
             this.animals[index%animalsAmount].move(this.moves[index])
             val newPosition = animals[index%animalsAmount].getPosition()
