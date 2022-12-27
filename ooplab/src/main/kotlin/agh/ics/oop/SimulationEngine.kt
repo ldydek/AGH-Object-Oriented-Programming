@@ -1,11 +1,11 @@
 package agh.ics.oop
 
 class SimulationEngine(
-    private val moves: ArrayList<MoveDirection>,
     private val map: IWorldMap,
     positions: Array<Vector2d>
 ) : IEngine, Runnable {
 
+    private var moves: ArrayList<MoveDirection> = ArrayList()
     private val animals: ArrayList<Animal> = ArrayList()
     private val observers: ArrayList<IPositionChangeObserver> = ArrayList()
     private var moveDelay: Long = 1000
@@ -45,5 +45,9 @@ class SimulationEngine(
 
     fun setMoveDelay(moveDelay: Int) {
         this.moveDelay = moveDelay.toLong()
+    }
+
+    fun setMoveDirections(moves: ArrayList<MoveDirection>) {
+        this.moves = moves
     }
 }

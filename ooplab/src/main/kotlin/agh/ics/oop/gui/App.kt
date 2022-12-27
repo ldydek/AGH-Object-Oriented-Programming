@@ -4,13 +4,13 @@ import agh.ics.oop.*
 import javafx.application.Application
 import javafx.application.Platform
 import javafx.geometry.HPos
+import javafx.geometry.Pos
 import javafx.geometry.VPos
 import javafx.scene.Scene
+import javafx.scene.control.Button
 import javafx.scene.control.Label
-import javafx.scene.layout.ColumnConstraints
-import javafx.scene.layout.GridPane
-import javafx.scene.layout.RowConstraints
-import javafx.scene.layout.VBox
+import javafx.scene.control.TextField
+import javafx.scene.layout.*
 import javafx.stage.Stage
 
 
@@ -23,36 +23,33 @@ class App : Application(), IPositionChangeObserver {
     private val cellSize = 60
 
     override fun init() {
-//        val args = parameters.raw
-        val args = arrayOf("f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f",
-            "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f")
-        val directions: ArrayList<MoveDirection> = OptionParser().parse(args)
         val positions = arrayOf(Vector2d(4, 6), Vector2d(4, 7), Vector2d(5, 6))
-        this.engine  = SimulationEngine(directions, map, positions)
+        this.engine  = SimulationEngine(map, positions)
         engine?.addObserver(this)
         engine?.setMoveDelay(moveDelay)
-        val engineThread = Thread(engine)
-        engineThread.start()
     }
 
     override fun start(primaryStage: Stage?) {
-        println(map)
-//    bottom left and upper right corners of map
+        val start = Button("START")
+        val moves = TextField()
+        var exceptionInfo = Label()
+        val hBox = HBox(start, moves, exceptionInfo)
+
+        hBoxStyling(hBox)
 
         val (rowsNumber, columnsNumber) = countRowColumnQuantity()
-        val gridPane: GridPane = createGridPane()
-        addGridPaneElements()
-        val scene = Scene(gridPane, (this.cellSize * (columnsNumber+1)).toDouble(),
-            (this.cellSize * (rowsNumber+1)).toDouble())
-        if (primaryStage != null) {
-            primaryStage.scene = scene
-        }
+        val vBox = VBox(hBox, gridPane)
+        createGridPane()
+        val scene = Scene(vBox, (this.cellSize * (columnsNumber+1)).toDouble(),
+            (this.cellSize * (rowsNumber+2)).toDouble())
+
+        buttonHandler(start, moves, exceptionInfo)
+
+        primaryStage?.scene = scene
         primaryStage?.show()
     }
 
     private fun createGridPane(): GridPane {
-        println(map.getCorners()[0])
-        println(map.getCorners()[1])
         this.gridPane.isGridLinesVisible = false
         this.gridPane.isGridLinesVisible = true
 
@@ -74,6 +71,7 @@ class App : Application(), IPositionChangeObserver {
         }
 
         addCoordinates()
+        addGridPaneElements()
         return gridPane
     }
 
@@ -133,7 +131,30 @@ class App : Application(), IPositionChangeObserver {
         Platform.runLater {
             gridPane.children.clear()
             createGridPane()
-            addGridPaneElements()
         }
+    }
+
+    private fun buttonHandler(button: Button, textField: TextField, exceptionInfo: Label) {
+        try {
+            button.setOnAction {
+                val input: String = textField.text
+                val movesStringList: List<String> = input.split(" ")
+                val moveDirectionList = OptionParser().parse(movesStringList.toTypedArray())
+                engine?.setMoveDirections(moveDirectionList)
+                exceptionInfo.text = "POPRAWNE DANE!"
+                val engineThread = Thread(engine)
+                engineThread.start()
+            }
+        } catch (exception: IllegalArgumentException) {
+            println(exception)
+            exceptionInfo.text = "BŁĘDNE DANE!"
+        }
+    }
+
+    private fun hBoxStyling(hBox: HBox) {
+        hBox.prefWidth = this.cellSize.toDouble()
+        hBox.prefHeight = this.cellSize.toDouble()
+        hBox.alignment = Pos.CENTER
+        hBox.spacing = 10.0
     }
 }
