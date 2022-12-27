@@ -48,6 +48,13 @@ class App : Application(), IPositionChangeObserver {
         primaryStage?.scene = scene
         primaryStage?.show()
     }
+    
+    override fun positionChanged(oldPosition: Vector2d, newPosition: Vector2d) {
+        Platform.runLater {
+            gridPane.children.clear()
+            createGridPane()
+        }
+    }
 
     private fun createGridPane(): GridPane {
         this.gridPane.isGridLinesVisible = false
@@ -125,13 +132,6 @@ class App : Application(), IPositionChangeObserver {
         val rowsNumber = cornersCoordinates[1].y - cornersCoordinates[0].y + 1
         val columnsNumber = cornersCoordinates[1].x - cornersCoordinates[0].x + 1
         return arrayOf(rowsNumber, columnsNumber)
-    }
-
-    override fun positionChanged(oldPosition: Vector2d, newPosition: Vector2d) {
-        Platform.runLater {
-            gridPane.children.clear()
-            createGridPane()
-        }
     }
 
     private fun buttonHandler(button: Button, textField: TextField, exceptionInfo: Label) {
